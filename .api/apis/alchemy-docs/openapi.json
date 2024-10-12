@@ -1,0 +1,535 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "💸 Transfers API (Tx History)",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://{network}.g.alchemy.com/v2",
+      "variables": {
+        "network": {
+          "enum": [
+            "eth-mainnet",
+            "eth-sepolia",
+            "polygon-mainnet",
+            "polygon-amoy",
+            "arb-mainnet",
+            "arb-sepolia",
+            "opt-mainnet",
+            "opt-sepolia",
+            "base-mainnet",
+            "base-sepolia",
+            "zksync-mainnet",
+            "zksync-sepolia",
+            "arbnova-mainnet"
+          ],
+          "default": "eth-mainnet"
+        }
+      }
+    }
+  ],
+  "x-sandbox": {
+    "category": {
+      "type": {
+        "name": "category",
+        "type": "string",
+        "enum": [
+          "core",
+          "bundler",
+          "nft",
+          "token",
+          "transfers",
+          "transaction-receipts",
+          "gas-manager",
+          "trace",
+          "debug",
+          "gas-optimized-transactions",
+          "private-transactions",
+          "notify",
+          "transaction-simulation"
+        ]
+      },
+      "value": "transfers"
+    }
+  },
+  "paths": {
+    "/{apiKey}": {
+      "post": {
+        "summary": "alchemy_getAssetTransfers",
+        "description": "The Transfers API allows you to easily fetch historical transactions for any address across Ethereum and supported L2s including Polygon, Arbitrum, and Optimism.",
+        "tags": [
+          "Transfers API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "<style>\n  .custom-style {\n    color: #048FF4;\n  }\n</style>\nFor higher throughput, <span class=\"custom-style\"><a href=\"https://alchemy.com/?a=docs-demo\" target=\"_blank\">create your own API key</a></span>\n"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "default": 1
+                      },
+                      "jsonrpc": {
+                        "type": "string",
+                        "default": "2.0"
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "method": {
+                        "default": "alchemy_getAssetTransfers",
+                        "type": "string"
+                      },
+                      "params": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "category"
+                          ],
+                          "properties": {
+                            "fromBlock": {
+                              "type": "string",
+                              "description": "String - Inclusive from block (hex string, int, `latest`, or `indexed`). Defaults to `0x0`",
+                              "default": "0x0"
+                            },
+                            "toBlock": {
+                              "type": "string",
+                              "description": "String - Inclusive to block (hex string, int, `latest`, or `indexed`). Defaults to `latest`. Read more about block tags <span class=\"custom-style\"><a href=\"https://docs.alchemy.com/reference/transfers-api-quickstart#what-are-the-different-types-of-block-tags\" target=\"_blank\">here</a></span>",
+                              "default": "latest"
+                            },
+                            "fromAddress": {
+                              "type": "string",
+                              "description": "String - From address (hex string). Default wildcard - any address",
+                              "pattern": "^0[xX][0-9a-fA-F]+$"
+                            },
+                            "toAddress": {
+                              "type": "string",
+                              "description": "String - To address (hex string). Default wildcard - any address",
+                              "pattern": "^0[xX][0-9a-fA-F]+$",
+                              "default": "0x5c43B1eD97e52d009611D89b74fA829FE4ac56b1"
+                            },
+                            "contractAddresses": {
+                              "type": "array",
+                              "description": "String - List of contract addresses (hex strings) to filter for - only applies to \"erc20\", \"erc721\", \"erc1155\" transfers. Default wildcard - any address",
+                              "items": {
+                                "type": "string",
+                                "pattern": "^0[xX][0-9a-fA-F]+$"
+                              }
+                            },
+                            "category": {
+                              "type": "array",
+                              "description": "'Array of categories, can be any of the following: \"external\", \"internal\", \"erc20\", \"erc721\", \"erc1155\", or \"specialnft\". See the table above for supported categories on each network.'\n",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "external",
+                                  "internal",
+                                  "erc20",
+                                  "erc721",
+                                  "erc1155",
+                                  "specialnft"
+                                ],
+                                "default": "external"
+                              }
+                            },
+                            "order": {
+                              "type": "string",
+                              "description": "String - Whether to return results in ascending (`asc`) or descending (`desc`) order. Ascending order is from oldest to newest transactions, descending order is from newest to oldest. Defaults to `asc`.\n",
+                              "enum": [
+                                "asc",
+                                "desc"
+                              ]
+                            },
+                            "withMetadata": {
+                              "type": "boolean",
+                              "description": "Boolean - Whether or not to include additional metadata about each transfer event. Defaults to `false`.",
+                              "default": false
+                            },
+                            "excludeZeroValue": {
+                              "type": "boolean",
+                              "description": "Boolean - A boolean to exclude transfers with zero value - zero value is not the same as null value. Defaults to `true`.",
+                              "default": true
+                            },
+                            "maxCount": {
+                              "type": "string",
+                              "description": "Max hex string number of results to return per call. Defaults to `0x3e8` (1000).",
+                              "default": "0x3e8"
+                            },
+                            "pageKey": {
+                              "type": "string",
+                              "description": "String - UUID for pagination. If more results are available, a uuid pageKey will be returned in the response. Pass that uuid into pageKey to fetch the next 1000 or maxCount."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "x-readme": {
+          "samples-languages": [
+            "curl",
+            "javascript",
+            "python"
+          ],
+          "code-samples": [
+            {
+              "language": "javascript",
+              "name": "Alchemy SDK",
+              "code": "// Setup: npm install alchemy-sdk\nimport { Alchemy, Network } from \"alchemy-sdk\";\n\nconst config = {\n  apiKey: \"demo\",\n  network: Network.ETH_MAINNET,\n};\nconst alchemy = new Alchemy(config);\n\n// Address we want get NFT mints from\nconst toAddress = \"0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152\";\n\nconst res = await alchemy.core.getAssetTransfers({\n  fromBlock: \"0x0\",\n  fromAddress: \"0x0000000000000000000000000000000000000000\",\n  toAddress: toAddress,\n  excludeZeroValue: true,\n  category: [\"erc721\", \"erc1155\"],\n});\n\nconsole.log(res);\n"
+            }
+          ]
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "jsonrpc": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "result": {
+                          "type": "object",
+                          "description": "An object with the following fields.",
+                          "properties": {
+                            "pageKey": {
+                              "type": "string",
+                              "description": "Uuid of next page of results (if exists, else blank)."
+                            },
+                            "transfers": {
+                              "type": "array",
+                              "description": "Array of objects - sorted in ascending order by block number, ties broken by category (external , internal, token transfers).",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "category": {
+                                    "type": "string",
+                                    "description": "'external', 'internal', 'token', 'erc20', 'erc721', 'erc1155', 'specialnft' - label for the transfer."
+                                  },
+                                  "blockNum": {
+                                    "type": "string",
+                                    "description": "The block where the transfer occurred (hex string)."
+                                  },
+                                  "from": {
+                                    "type": "string",
+                                    "description": "From address of transfer (hex string)."
+                                  },
+                                  "to": {
+                                    "type": "string",
+                                    "description": "To address of transfer (hex string). null if contract creation."
+                                  },
+                                  "value": {
+                                    "type": "number",
+                                    "nullable": true,
+                                    "description": "Converted asset transfer value as a number (raw value divided by contract decimal). null if ERC721 transfer or contract decimal not available."
+                                  },
+                                  "erc721TokenId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "(Deprecated) Legacy token ID field for ERC721 tokens (hex string). The `tokenId` field should be used instead."
+                                  },
+                                  "erc1155Metadata": {
+                                    "type": "array",
+                                    "nullable": true,
+                                    "description": "A list of objects containing the ERC1155 tokenId (hex string) and value (hex string). null if not an ERC1155 transfer.",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "tokenId": {
+                                          "type": "string"
+                                        },
+                                        "value": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "tokenId": {
+                                    "type": "string",
+                                    "description": "Token ID for ERC721 (or other NFT) tokens."
+                                  },
+                                  "asset": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "description": "ETH or the token's symbol. null if not defined in the contract and not available from other sources."
+                                  },
+                                  "uniqueId": {
+                                    "type": "string",
+                                    "description": "A unique identifier for the transfer object."
+                                  },
+                                  "hash": {
+                                    "type": "string",
+                                    "description": "Transaction hash (hex string)."
+                                  },
+                                  "rawContract": {
+                                    "type": "object",
+                                    "properties": {
+                                      "value": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Raw transfer value (hex string). null if ERC721 or ERC1155 transfer."
+                                      },
+                                      "address": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Contract address (hex string). null if external or internal transfer."
+                                      },
+                                      "decimal": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Contract decimal (hex string). null if not defined in the contract and not available from other sources."
+                                      }
+                                    }
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "properties": {
+                                      "blockTimestamp": {
+                                        "type": "string",
+                                        "description": "Timestamp of the block from which the transaction event originated (ISO-formatted timestamp)."
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "example": {
+                        "jsonrpc": "2.0",
+                        "id": 1,
+                        "result": {
+                          "transfers": [
+                            {
+                              "blockNum": "0xb0eadc",
+                              "uniqueId": "0x3847245c01829b043431067fb2bfa95f7b5bdc7e4246c843e7a573ab6f26f5ff:external",
+                              "hash": "0x3847245c01829b043431067fb2bfa95f7b5bdc7e4246c843e7a573ab6f26f5ff",
+                              "from": "0xef4396d9ff8107086d215a1c9f8866c54795d7c7",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 0.5,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x6f05b59d3b20000",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xb96042",
+                              "uniqueId": "0x5c88806ce2e4a42c5fbd5804f340ed887995914546cf92ec39eb5472cf22c88c:external",
+                              "hash": "0x5c88806ce2e4a42c5fbd5804f340ed887995914546cf92ec39eb5472cf22c88c",
+                              "from": "0xef4396d9ff8107086d215a1c9f8866c54795d7c7",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 0.27,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x3bf3b91c95b0000",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xbd295f",
+                              "uniqueId": "0x7c007a5ec7a767a952070b54dbd5f9d4475d7a636a3605722722721003b9fbba:external",
+                              "hash": "0x7c007a5ec7a767a952070b54dbd5f9d4475d7a636a3605722722721003b9fbba",
+                              "from": "0x3cd751e6b0078be393132286c442345e5dc49699",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 0.07024968,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0xf993b635fc2000",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xd6313c",
+                              "uniqueId": "0x902f0c31beb18fcc94c633568ccc90b545dbaa8e17e57bc7b807ab997b3b974a:external",
+                              "hash": "0x902f0c31beb18fcc94c633568ccc90b545dbaa8e17e57bc7b807ab997b3b974a",
+                              "from": "0xeb2629a2734e272bcc07bda959863f316f4bd4cf",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 0.54583204,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x7932f59333a1000",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xda58db",
+                              "uniqueId": "0xae69f7fcbf72c3e087e612c4e60fddf8b4149b4b53e721f31741c6cbfbbae117:external",
+                              "hash": "0xae69f7fcbf72c3e087e612c4e60fddf8b4149b4b53e721f31741c6cbfbbae117",
+                              "from": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 0.0335,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x7704128ff9c000",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xea80a4",
+                              "uniqueId": "0xe72fc022957c7f8ae073cf2bc536650d9d7f0d7c4193d8a4ebeeb49885ae2c73:external",
+                              "hash": "0xe72fc022957c7f8ae073cf2bc536650d9d7f0d7c4193d8a4ebeeb49885ae2c73",
+                              "from": "0x5067c042e35881843f2b31dfc2db1f4f272ef48c",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 1e-18,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x1",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xea80b3",
+                              "uniqueId": "0xefedff918263f811936d92d461a91a0f5a39ee0991857038356900f3c607d1f9:external",
+                              "hash": "0xefedff918263f811936d92d461a91a0f5a39ee0991857038356900f3c607d1f9",
+                              "from": "0x5067c042e35881843f2b31dfc2db1f4f272ef48c",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 1e-18,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x1",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xea8e4d",
+                              "uniqueId": "0xc3b0a3f74ea2a1531b36bc7b54229ffa308309fcf9b5b0e6285a287114ff1bba:external",
+                              "hash": "0xc3b0a3f74ea2a1531b36bc7b54229ffa308309fcf9b5b0e6285a287114ff1bba",
+                              "from": "0x5067c042e35881843f2b31dfc2db1f4f272ef48c",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 0.0001,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x5af3107a4000",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xea8e56",
+                              "uniqueId": "0x516a55610b56cecbcdc10d9c48f6355ac16c0edafd7d8b61e36b7d3eaa492572:external",
+                              "hash": "0x516a55610b56cecbcdc10d9c48f6355ac16c0edafd7d8b61e36b7d3eaa492572",
+                              "from": "0x5067c042e35881843f2b31dfc2db1f4f272ef48c",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 2e-18,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x2",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            },
+                            {
+                              "blockNum": "0xea8e56",
+                              "uniqueId": "0x970c6a24c75d7aab93d37c9e3222e60a2f5b76e2d2b8fa962c1cb01a15ec2bef:external",
+                              "hash": "0x970c6a24c75d7aab93d37c9e3222e60a2f5b76e2d2b8fa962c1cb01a15ec2bef",
+                              "from": "0x5067c042e35881843f2b31dfc2db1f4f272ef48c",
+                              "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                              "value": 1e-18,
+                              "erc721TokenId": null,
+                              "erc1155Metadata": null,
+                              "tokenId": null,
+                              "asset": "ETH",
+                              "category": "external",
+                              "rawContract": {
+                                "value": "0x1",
+                                "address": null,
+                                "decimal": "0x12"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "alchemy-getAssetTransfers"
+      }
+    }
+  }
+}

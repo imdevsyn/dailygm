@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "alchemy-docs",
+      "source": "@alchemy-docs/v1.0#1pkps2pm07esyap",
+      "integrity": "sha512-Cz+yT3nRy+tq/JHelLKv6BDUksm/eJaP6+0sk4Ntm1mLlxuaYAIM1pWT7hjToTplreVUBpkCARiUTTsLLCPYtg==",
+      "installerVersion": "6.1.2"
+    }
+  ]
+}
