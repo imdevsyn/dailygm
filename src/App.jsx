@@ -265,7 +265,7 @@ export function App() {
               <CardContent>
                 <ScrollArea className="h-48 lg:overflow-auto">
                   {gms.length ? gms.map((date, index) => (
-                    <a key={date} href={`https://sepolia.basescan.org/tx/${hashList[index]?.hash}`} target="_blank">
+                    <a key={date} href={`https://basescan.org/tx/${hashList[index]?.hash}`} target="_blank">
                       <Card className="flex items-center cursor-pointer justify-between px-4 py-1 m-1 hover:bg-zinc-100">
                         <h2 className="text-base font-semibold text-gray-500">{getFormattedDate(Number(date))}</h2>
                         <img src={CheckIcon} alt="Check icon" className="w-5" />
