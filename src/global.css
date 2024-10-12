@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --font-family-poppins: 'Poppins', 'sans-serif';
+    --font-family-poppins: 'Poppins', sans-serif;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;

@@ -18,7 +18,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-family-poppins)']
+        sans: ['var(--font-family-poppins)', 'sans-serif']
       },
       keyframes: {
         "accordion-down": {
