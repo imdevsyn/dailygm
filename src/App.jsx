@@ -6,6 +6,8 @@ import { Label } from "./components/ui/label"
 import { Button } from "./components/ui/button"
 import { ScrollArea } from "./components/ui/scroll-area"
 import { useToast  } from "./components/hooks/use-toast"
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/modal";
+import {Tooltip} from "@nextui-org/tooltip";
 
 import BaseLogo from "./assets/Base_Logo.svg"
 import SunIcon from "./assets/sun.svg"
@@ -30,6 +32,7 @@ import {
 } from "./services/Web3Services"
 
 export function App() {
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const {data: walletClient } = useWalletClient();
   const { address } = useAccount()
   const { toast } = useToast()
@@ -103,7 +106,7 @@ export function App() {
         const transactionHash = response.transactionHash
         if (transactionHash) {
           toast({
-            title: "Mint Successfull.",
+            title: "Mint Successful.",
             description: "Your streak increased by +1 day.",
             className: "bg-green-200"
           })
@@ -221,6 +224,9 @@ export function App() {
             </a>
           </div>
           <div className="flex gap-6 items-center">
+          <Button onClick={onOpen} className="hidden sm:block text-base button-85" variant="ghost">
+            What&apos;s Next?
+          </Button>
             <img src={DailyGmLogo} alt="DailyGM Logo" className="w-16 sm:w-20" />
             <ConnectButton label="Connect Wallet" />
           </div>
@@ -280,15 +286,29 @@ export function App() {
                 </ScrollArea>
               </CardContent>
             </Card>
-            <Button type="button" onClick={ address ? handleMintGm : () => {
-                toast({
-                  variant: "destructive",
-                  title: "Uh oh! Something went wrong.",
-                  description: "Connect your wallet before GMing.",
-                })
-              }} className="flex gap-2 mt-4 w-full h-fit bg-[#ff9100] hover:bg-[#ff8500] text-lg rounded-xl disabled:opacity-100 disabled:cursor-not-allowed"
-                >
-              <img src={SunIcon} alt="White sun icon" className={ loading ? "animate-spin-slow w-5" : "w-5"} />
+            <Button 
+                type="button" 
+                onClick={ address 
+                  ? (!Number(gms[0]) || Number(gms[0]) < Math.floor(new Date().setUTCHours(0, 0, 0, 0) / 1000)) 
+                    ? handleMintGm 
+                    : () => {
+                      toast({
+                        title: "You have already GM'd today.",
+                        description: "Come back tomorrow to increase your streak!",
+                        className: "bg-blue-100 text-black border-none"
+                      });
+                    }
+                  : () => {
+                    toast({
+                      variant: "destructive",
+                      title: "Uh oh! Something went wrong.",
+                      description: "Connect your wallet before GMing.",
+                    });
+                  }
+                } 
+                className="flex gap-2 mt-4 w-full h-fit bg-[#ff9100] hover:bg-[#ff8500] text-lg rounded-xl disabled:opacity-100 disabled:cursor-not-allowed"
+              >
+                <img src={SunIcon} alt="White sun icon" className={loading ? "animate-spin-slow w-5" : "w-5"} />
                 GM
             </Button>
           </div>
@@ -350,13 +370,15 @@ export function App() {
                     </Card>
                     <div className="flex gap-4">
                       <Input type="text" placeholder="Based" className="outline-none" value={moodInput} onChange={handleMoodInput}/>
-                      <Button className="bg-blue-700 hover:bg-blue-600" onClick={() => setUserMood(moodInput)}>
-                        {moodLoader ? 
-                            <LoaderCircle className="w-4 mr-2 animate-spin" />
-                        : ""
-                        }
-                        Mood 
-                      </Button>
+                      <Tooltip content="0.0001 ETH is required">
+                        <Button className="bg-blue-700 hover:bg-blue-600" onClick={() => setUserMood(moodInput)}>
+                          {moodLoader ?
+                              <LoaderCircle className="w-4 mr-2 animate-spin" />
+                          : ""
+                          }
+                          Mood
+                        </Button>
+                      </Tooltip>
                     </div>
                   </div>
                   <div className="flex flex-wrap justify-center gap-4 max-w-[600px]">
@@ -397,6 +419,33 @@ export function App() {
             </div>
           </div>
         </Card>
+        <Modal size={'2xl'} isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">GM Culture Is Getting Onchain!</ModalHeader>
+                <ModalBody>
+                  <p>Hello fellows!</p>
+                  <p> 
+                    DailyGM is growing, and our next steps aim to take the GM culture to the next level! We are seeking strategic partnerships to expand our presence and deliver even more value to our users. Additionally, we will focus on increasing our user base, bringing new features, and fostering a vibrant and active community.
+                  </p>
+                  <p>
+                    We are also looking for developers, designers, and other enthusiasts who want to contribute to the project. Although we don&apos;t have financial resources available yet, we believe in DailyGM&apos;s potential and hope to build something amazing together. If you&apos;re excited to be part of this journey, 
+                    <a href="https://forms.gle/1VWGwMX3Pz3FCSeq6" target="_blank"><strong> join us</strong></a> and help shape the future of DailyGM!
+                  </p>
+                  <p>
+                    Stay tuned — DailyGM is just getting started!
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onClick={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </main>
     </div>
   )

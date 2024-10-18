@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import {NextUIProvider} from '@nextui-org/react'
 import { App } from './App.jsx'
 import { Toaster } from "./components/ui/toaster.jsx"
 import "./global.css"
@@ -33,13 +34,15 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={darkTheme()} locale="en-US" showRecentTransactions={true}>
-          <App />
-          <Toaster />
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <NextUIProvider>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider theme={darkTheme()} locale="en-US" showRecentTransactions={true}>
+            <App />
+            <Toaster />
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </NextUIProvider>
   </React.StrictMode>
 )
