@@ -5,6 +5,7 @@ import {
   WalletDropdownBasename,  
   WalletDropdownLink,
   WalletDropdownDisconnect,
+  ConnectWalletText,
 } from '@coinbase/onchainkit/wallet';
 import {
   Address,
@@ -20,7 +21,8 @@ import { color } from '@coinbase/onchainkit/theme';
 export function WalletComponents() {
   return (
     <Wallet>
-      <ConnectWallet withWalletAggregator>
+      <ConnectWallet withWalletAggregator className="bg-gray-900 hover:bg-gray-900">
+        <ConnectWalletText className="text-white">Connect Wallet</ConnectWalletText>
         <Avatar className="h-6 w-6" />
         <Name />
       </ConnectWallet>
