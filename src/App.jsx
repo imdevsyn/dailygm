@@ -246,24 +246,25 @@ export function App() {
             <img src={DailyGmLogo} alt="DailyGM Logo" className="w-16 sm:w-20" />
             {/* <ConnectButton label="Connect Wallet" /> */}
             <Wallet>
-              <ConnectWallet withWalletAggregator>
+              <ConnectWallet withWalletAggregator className="bg-[#030712] text-white rounded-xl">
                 <Avatar className="h-6 w-6" />
                 <Name />
               </ConnectWallet>
-              <WalletDropdown>
-                <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+              <WalletDropdown className="bg-[#1A1B1F] text-white">
+                <Identity className="px-4 pt-3 pb-2 hover:bg-[#1F2937]" hasCopyAddressOnClick>
                   <Avatar />
                   <Name />
                   <Address />
                   <EthBalance />
                 </Identity>
-                <WalletDropdownLink 
-                  icon="wallet" 
+                <WalletDropdownLink
+                  className="hover:bg-[#1F2937]"
+                  icon="wallet"
                   href="https://keys.coinbase.com"
                 >
                   Wallet
                 </WalletDropdownLink>
-                <WalletDropdownDisconnect />
+                <WalletDropdownDisconnect className="hover:bg-[#1F2937]" />
               </WalletDropdown>
             </Wallet>
           </div>
