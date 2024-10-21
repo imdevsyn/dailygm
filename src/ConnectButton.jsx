@@ -14,23 +14,24 @@ import {
   EthBalance, 
 } from '@coinbase/onchainkit/identity';
 import '@coinbase/onchainkit/styles.css';
+import { color } from '@coinbase/onchainkit/theme';
 
  
 export function WalletComponents() {
   return (
     <Wallet>
-      <ConnectWallet className="bg-gray-900 text-white">
+      <ConnectWallet withWalletAggregator>
         <Avatar className="h-6 w-6" />
         <Name />
       </ConnectWallet>
-      <WalletDropdown className="bg-gray-900 text-white" >
+      <WalletDropdown className="" >
         <Identity 
           className="flex px-4 pt-3 pb-2" 
           hasCopyAddressOnClick
         >
           <Avatar />
           <Name />
-          <Address />
+          <Address className={color.foregroundMuted} />
           <EthBalance />
         </Identity>
         <WalletDropdownBasename />
