@@ -13,6 +13,9 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { structuralSharing } from '@wagmi/core/query';
 import { http } from 'wagmi'
 
+import { OnchainKitProvider } from '@coinbase/onchainkit';
+import '@coinbase/onchainkit/styles.css';
+
 
 const config = getDefaultConfig({
   appName: 'DailyGM',
@@ -37,10 +40,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <NextUIProvider>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider theme={darkTheme()} locale="en-US" showRecentTransactions={true}>
-            <App />
-            <Toaster />
-          </RainbowKitProvider>
+          <OnchainKitProvider 
+            apiKey={import.meta.VITE_ONCHAINKIT_API_KEY}
+            chain={base}
+            >
+            <RainbowKitProvider theme={darkTheme()} locale="en-US" showRecentTransactions={true}>
+              <App />
+              <Toaster />
+            </RainbowKitProvider>
+          </OnchainKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
     </NextUIProvider>

@@ -18,8 +18,9 @@ import XLogo from "./assets/x-logo.png"
 import {Users, Activity, Sun, LoaderCircle, CircleHelp, MessageSquareText, SquareArrowOutUpRight } from "lucide-react"
 
 import { useEffect, useState } from "react"
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useWalletClient } from 'wagmi';
+// import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 import { 
   getGms, 
   publicMint, 
@@ -30,6 +31,21 @@ import {
   getMood, 
   getTransactionHashes 
 } from "./services/Web3Services"
+
+import { 
+  ConnectWallet, 
+  Wallet, 
+  WalletDropdown, 
+  WalletDropdownDisconnect, 
+  WalletDropdownLink,
+} from '@coinbase/onchainkit/wallet'; 
+import {
+  Address,
+  Avatar,
+  Name,
+  Identity,
+  EthBalance,
+} from '@coinbase/onchainkit/identity';
 
 export function App() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -228,7 +244,28 @@ export function App() {
             What&apos;s Next?
           </Button>
             <img src={DailyGmLogo} alt="DailyGM Logo" className="w-16 sm:w-20" />
-            <ConnectButton label="Connect Wallet" />
+            {/* <ConnectButton label="Connect Wallet" /> */}
+            <Wallet>
+              <ConnectWallet withWalletAggregator>
+                <Avatar className="h-6 w-6" />
+                <Name />
+              </ConnectWallet>
+              <WalletDropdown>
+                <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
+                  <Avatar />
+                  <Name />
+                  <Address />
+                  <EthBalance />
+                </Identity>
+                <WalletDropdownLink 
+                  icon="wallet" 
+                  href="https://keys.coinbase.com"
+                >
+                  Wallet
+                </WalletDropdownLink>
+                <WalletDropdownDisconnect />
+              </WalletDropdown>
+            </Wallet>
           </div>
         </Card>
       </header>

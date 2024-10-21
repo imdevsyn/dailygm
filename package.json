@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@api/alchemy-docs": "file:.api/apis/alchemy-docs",
+    "@coinbase/onchainkit": "^0.34.1",
     "@fontsource/ibm-plex-mono": "^5.1.0",
     "@nextui-org/modal": "^2.0.41",
     "@nextui-org/react": "^2.4.8",
