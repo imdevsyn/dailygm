@@ -19,7 +19,6 @@ import {Users, Activity, Sun, LoaderCircle, CircleHelp, MessageSquareText, Squar
 
 import { useEffect, useState } from "react"
 import { useAccount, useWalletClient } from 'wagmi';
-// import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import { 
   getGms, 
@@ -32,20 +31,7 @@ import {
   getTransactionHashes 
 } from "./services/Web3Services"
 
-import { 
-  ConnectWallet, 
-  Wallet, 
-  WalletDropdown, 
-  WalletDropdownDisconnect, 
-  WalletDropdownLink,
-} from '@coinbase/onchainkit/wallet'; 
-import {
-  Address,
-  Avatar,
-  Name,
-  Identity,
-  EthBalance,
-} from '@coinbase/onchainkit/identity';
+import { WalletComponents } from "./ConnectButton"
 
 export function App() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
@@ -244,22 +230,7 @@ export function App() {
             What&apos;s Next?
           </Button>
             <img src={DailyGmLogo} alt="DailyGM Logo" className="w-16 sm:w-20" />
-            {/* <ConnectButton label="Connect Wallet" /> */}
-            <Wallet>
-              <ConnectWallet withWalletAggregator className="bg-[#030712] text-white rounded-xl">
-                <Avatar className="h-6 w-6" />
-                <Name />
-              </ConnectWallet>
-              <WalletDropdown className="bg-[#1A1B1F] text-white">
-                <Identity className="px-4 pt-3 pb-2 hover:bg-[#1F2937]" hasCopyAddressOnClick>
-                  <Avatar />
-                  <Name />
-                  <Address />
-                  <EthBalance />
-                </Identity>
-                <WalletDropdownDisconnect className="hover:bg-[#1F2937]" />
-              </WalletDropdown>
-            </Wallet>
+            <WalletComponents />
           </div>
         </Card>
       </header>
