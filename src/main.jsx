@@ -14,8 +14,6 @@ import { structuralSharing } from '@wagmi/core/query';
 import { http } from 'wagmi'
 
 import { OnchainKitProvider } from '@coinbase/onchainkit';
-import '@coinbase/onchainkit/styles.css';
-
 
 const config = getDefaultConfig({
   appName: 'DailyGM',
