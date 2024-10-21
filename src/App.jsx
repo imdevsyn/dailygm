@@ -257,13 +257,6 @@ export function App() {
                   <Address />
                   <EthBalance />
                 </Identity>
-                <WalletDropdownLink
-                  className="hover:bg-[#1F2937]"
-                  icon="wallet"
-                  href="https://keys.coinbase.com"
-                >
-                  Wallet
-                </WalletDropdownLink>
                 <WalletDropdownDisconnect className="hover:bg-[#1F2937]" />
               </WalletDropdown>
             </Wallet>
